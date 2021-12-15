@@ -1,0 +1,135 @@
+
+#출처: https://www.tensorflow.org/tutorials/keras/classification?hl=ko#top_of_page
+#02 예측만들기: 훈련된 모델을 사용하여 이미지에 대한 예측을 만들 수 있습니다.
+# 최종 예측결과는 무엇입니다? (9=앵클부츠)
+
+predictions = model.predict(test_images)
+
+predictions[0]
+
+np.argmax(predictions[0])
+
+test_labels[0]
+
+def plot_image(i, predictions_array, true_label, img):
+  predictions_array, true_label, img = predictions_array[i], true_label[i], img[i]
+  plt.grid(False)
+  plt.xticks([])
+  plt.yticks([])
+
+  plt.imshow(img, cmap=plt.cm.binary)
+
+  predicted_label = np.argmax(predictions_array)
+  if predicted_label == true_label:
+    color = 'blue'
+  else:
+    color = 'red'
+
+  plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
+                                100*np.max(predictions_array),
+                                class_names[true_label]),
+                                color=color)
+
+def plot_value_array(i, predictions_array, true_label):
+  predictions_array, true_label = predictions_array[i], true_label[i]
+  plt.grid(False)
+  plt.xticks([])
+  plt.yticks([])
+  thisplot = plt.bar(range(10), predictions_array, color="#777777")
+  plt.ylim([0, 1])
+  predicted_label = np.argmax(predictions_array)
+
+  thisplot[predicted_label].set_color('red')
+  thisplot[true_label].set_color('blue')
+
+i = 0
+plt.figure(figsize=(6,3))
+plt.subplot(1,2,1)
+plot_image(i, predictions, test_labels, test_images)
+plt.subplot(1,2,2)
+plot_value_array(i, predictions,  test_labels)
+plt.show()
+
+#앵클부츠를 잘 맞추었나요? 
+# 0=티셔츠, 1=바지, 2=풀오버, 3=드레스, 4=코트, 5=샌들, 6=셔츠, 7=스니커, 8=가방, 9=앵클부츠
+
+
+i = 12
+plt.figure(figsize=(6,3))
+plt.subplot(1,2,1)
+plot_image(i, predictions, test_labels, test_images)
+plt.subplot(1,2,2)
+plot_value_array(i, predictions,  test_labels)
+plt.show()
+
+
+#스니커즈를 잘 맞추었나요? 
+# 0=티셔츠, 1=바지, 2=풀오버, 3=드레스, 4=코트, 5=샌들, 6=셔츠, 7=스니커, 8=가방, 9=앵클부츠
+
+i = 12
+plt.figure(figsize=(6,3))
+plt.subplot(1,2,1)
+plot_image(i, predictions, test_labels, test_images)
+plt.subplot(1,2,2)
+plot_value_array(i, predictions,  test_labels)
+plt.show()
+
+#여러개 예측 신뢰도를 평가해봅시다. 
+# 처음 X 개의 테스트 이미지와 예측 레이블, 진짜 레이블을 출력합니다
+# 올바른 예측은 파랑색으로 잘못된 예측은 빨강색으로 나타냅니다
+num_rows = 5
+num_cols = 3
+num_images = num_rows*num_cols
+plt.figure(figsize=(2*2*num_cols, 2*num_rows))
+for i in range(num_images):
+  plt.subplot(num_rows, 2*num_cols, 2*i+1)
+  plot_image(i, predictions, test_labels, test_images)
+  plt.subplot(num_rows, 2*num_cols, 2*i+2)
+  plot_value_array(i, predictions, test_labels)
+plt.show()
+
+# 마지막 훈련입니다.
+# 테스트 세트에서 이미지 하나를 선택합니다
+img = test_images[0]
+
+print(img.shape)
+
+# 이미지 하나만 사용할 때도 배치에 추가합니다
+img = (np.expand_dims(img,0))
+
+print(img.shape)
+
+predictions_single = model.predict(img)
+
+print(predictions_single)
+
+plot_value_array(0, predictions_single, test_labels)
+_ = plt.xticks(range(10), class_names, rotation=45)
+
+# 최종 예측결과는 무엇입니다? (9=앵클부츠)
+
+np.argmax(predictions_single[0])
+
+#@title MIT License
+#
+# Copyright (c) 2017 François Chollet
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+
+#출처: https://www.tensorflow.org/tutorials/keras/classification?hl=ko#top_of_page
